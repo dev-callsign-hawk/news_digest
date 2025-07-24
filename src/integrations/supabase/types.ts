@@ -14,7 +14,161 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      news_articles: {
+        Row: {
+          content_generated_by: string | null
+          created_at: string | null
+          headline: string
+          id: string
+          image_url: string | null
+          published_date: string
+          region: Database["public"]["Enums"]["region_type"] | null
+          source_url: string
+          summary: string | null
+          tags: string[] | null
+          updated_at: string | null
+          zone: Database["public"]["Enums"]["zone_type"] | null
+        }
+        Insert: {
+          content_generated_by?: string | null
+          created_at?: string | null
+          headline: string
+          id?: string
+          image_url?: string | null
+          published_date: string
+          region?: Database["public"]["Enums"]["region_type"] | null
+          source_url: string
+          summary?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          zone?: Database["public"]["Enums"]["zone_type"] | null
+        }
+        Update: {
+          content_generated_by?: string | null
+          created_at?: string | null
+          headline?: string
+          id?: string
+          image_url?: string | null
+          published_date?: string
+          region?: Database["public"]["Enums"]["region_type"] | null
+          source_url?: string
+          summary?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          zone?: Database["public"]["Enums"]["zone_type"] | null
+        }
+        Relationships: []
+      }
+      news_requests: {
+        Row: {
+          articles_found: number | null
+          created_at: string | null
+          id: string
+          region: Database["public"]["Enums"]["region_type"] | null
+          request_status: string | null
+          requested_date: string
+          user_id: string
+          zone: Database["public"]["Enums"]["zone_type"] | null
+        }
+        Insert: {
+          articles_found?: number | null
+          created_at?: string | null
+          id?: string
+          region?: Database["public"]["Enums"]["region_type"] | null
+          request_status?: string | null
+          requested_date: string
+          user_id: string
+          zone?: Database["public"]["Enums"]["zone_type"] | null
+        }
+        Update: {
+          articles_found?: number | null
+          created_at?: string | null
+          id?: string
+          region?: Database["public"]["Enums"]["region_type"] | null
+          request_status?: string | null
+          requested_date?: string
+          user_id?: string
+          zone?: Database["public"]["Enums"]["zone_type"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          created_at: string | null
+          id: string
+          notification_enabled: boolean | null
+          preferred_regions: Database["public"]["Enums"]["region_type"][] | null
+          preferred_zones: Database["public"]["Enums"]["zone_type"][] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          notification_enabled?: boolean | null
+          preferred_regions?:
+            | Database["public"]["Enums"]["region_type"][]
+            | null
+          preferred_zones?: Database["public"]["Enums"]["zone_type"][] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          notification_enabled?: boolean | null
+          preferred_regions?:
+            | Database["public"]["Enums"]["region_type"][]
+            | null
+          preferred_zones?: Database["public"]["Enums"]["zone_type"][] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +177,108 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      region_type:
+        | "delhi"
+        | "mumbai"
+        | "kolkata"
+        | "chennai"
+        | "bangalore"
+        | "hyderabad"
+        | "pune"
+        | "ahmedabad"
+        | "jaipur"
+        | "lucknow"
+        | "kanpur"
+        | "nagpur"
+        | "indore"
+        | "thane"
+        | "bhopal"
+        | "visakhapatnam"
+        | "pimpri"
+        | "patna"
+        | "vadodara"
+        | "ghaziabad"
+        | "ludhiana"
+        | "agra"
+        | "nashik"
+        | "faridabad"
+        | "meerut"
+        | "rajkot"
+        | "kalyan"
+        | "vasai"
+        | "varanasi"
+        | "srinagar"
+        | "aurangabad"
+        | "dhanbad"
+        | "amritsar"
+        | "navi_mumbai"
+        | "allahabad"
+        | "ranchi"
+        | "howrah"
+        | "coimbatore"
+        | "jabalpur"
+        | "gwalior"
+        | "vijayawada"
+        | "jodhpur"
+        | "madurai"
+        | "raipur"
+        | "kota"
+        | "guwahati"
+        | "chandigarh"
+        | "solapur"
+        | "hubli"
+        | "tiruchirappalli"
+        | "bareilly"
+        | "mysore"
+        | "tiruppur"
+        | "gurgaon"
+        | "aligarh"
+        | "jalandhar"
+        | "bhubaneswar"
+        | "salem"
+        | "warangal"
+        | "guntur"
+        | "bhiwandi"
+        | "saharanpur"
+        | "gorakhpur"
+        | "bikaner"
+        | "amravati"
+        | "noida"
+        | "jamshedpur"
+        | "bhilai"
+        | "cuttack"
+        | "firozabad"
+        | "kochi"
+        | "nellore"
+        | "bhavnagar"
+        | "dehradun"
+        | "durgapur"
+        | "asansol"
+        | "rourkela"
+        | "nanded"
+        | "kolhapur"
+        | "ajmer"
+        | "akola"
+        | "gulbarga"
+        | "jamnagar"
+        | "ujjain"
+        | "loni"
+        | "siliguri"
+        | "jhansi"
+        | "ulhasnagar"
+        | "jammu"
+        | "sangli_miraj_kupwad"
+        | "mangalore"
+        | "erode"
+        | "belgaum"
+        | "ambattur"
+        | "tirunelveli"
+        | "malegaon"
+        | "gaya"
+        | "jalgaon"
+        | "udaipur"
+        | "maheshtala"
+      zone_type: "north" | "south" | "east" | "west" | "central" | "northeast"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +405,110 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      region_type: [
+        "delhi",
+        "mumbai",
+        "kolkata",
+        "chennai",
+        "bangalore",
+        "hyderabad",
+        "pune",
+        "ahmedabad",
+        "jaipur",
+        "lucknow",
+        "kanpur",
+        "nagpur",
+        "indore",
+        "thane",
+        "bhopal",
+        "visakhapatnam",
+        "pimpri",
+        "patna",
+        "vadodara",
+        "ghaziabad",
+        "ludhiana",
+        "agra",
+        "nashik",
+        "faridabad",
+        "meerut",
+        "rajkot",
+        "kalyan",
+        "vasai",
+        "varanasi",
+        "srinagar",
+        "aurangabad",
+        "dhanbad",
+        "amritsar",
+        "navi_mumbai",
+        "allahabad",
+        "ranchi",
+        "howrah",
+        "coimbatore",
+        "jabalpur",
+        "gwalior",
+        "vijayawada",
+        "jodhpur",
+        "madurai",
+        "raipur",
+        "kota",
+        "guwahati",
+        "chandigarh",
+        "solapur",
+        "hubli",
+        "tiruchirappalli",
+        "bareilly",
+        "mysore",
+        "tiruppur",
+        "gurgaon",
+        "aligarh",
+        "jalandhar",
+        "bhubaneswar",
+        "salem",
+        "warangal",
+        "guntur",
+        "bhiwandi",
+        "saharanpur",
+        "gorakhpur",
+        "bikaner",
+        "amravati",
+        "noida",
+        "jamshedpur",
+        "bhilai",
+        "cuttack",
+        "firozabad",
+        "kochi",
+        "nellore",
+        "bhavnagar",
+        "dehradun",
+        "durgapur",
+        "asansol",
+        "rourkela",
+        "nanded",
+        "kolhapur",
+        "ajmer",
+        "akola",
+        "gulbarga",
+        "jamnagar",
+        "ujjain",
+        "loni",
+        "siliguri",
+        "jhansi",
+        "ulhasnagar",
+        "jammu",
+        "sangli_miraj_kupwad",
+        "mangalore",
+        "erode",
+        "belgaum",
+        "ambattur",
+        "tirunelveli",
+        "malegaon",
+        "gaya",
+        "jalgaon",
+        "udaipur",
+        "maheshtala",
+      ],
+      zone_type: ["north", "south", "east", "west", "central", "northeast"],
+    },
   },
 } as const
