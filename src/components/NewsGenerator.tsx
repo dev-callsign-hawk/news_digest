@@ -20,8 +20,10 @@ export const NewsGenerator = ({ onNewsGenerated }: NewsGeneratorProps) => {
   const { toast } = useToast();
 
   const regions = [
-    "North India", "South India", "East India", "West India", 
-    "Central India", "Northeast India"
+    "Delhi", "Mumbai", "Kolkata", "Chennai", "Bangalore", "Hyderabad", 
+    "Pune", "Ahmedabad", "Jaipur", "Lucknow", "Kanpur", "Nagpur",
+    "Indore", "Bhopal", "Patna", "Guwahati", "Chandigarh", "Kochi",
+    "Dehradun", "Jammu", "Udaipur", "Mysore", "Coimbatore", "Vadodara"
   ];
 
   const newsBeats = [
@@ -45,7 +47,7 @@ export const NewsGenerator = ({ onNewsGenerated }: NewsGeneratorProps) => {
     try {
       const { data, error } = await supabase.functions.invoke('generate-news', {
         body: {
-          region,
+          region: region.toLowerCase(),
           news_beat: newsBeat.toLowerCase(),
           requestedDate: date
         }
