@@ -21,13 +21,13 @@ export type Database = {
           headline: string
           id: string
           image_url: string | null
+          news_beat: Database["public"]["Enums"]["news_beat_type"] | null
           published_date: string
           region: Database["public"]["Enums"]["region_type"] | null
           source_url: string
           summary: string | null
           tags: string[] | null
           updated_at: string | null
-          zone: Database["public"]["Enums"]["zone_type"] | null
         }
         Insert: {
           content_generated_by?: string | null
@@ -35,13 +35,13 @@ export type Database = {
           headline: string
           id?: string
           image_url?: string | null
+          news_beat?: Database["public"]["Enums"]["news_beat_type"] | null
           published_date: string
           region?: Database["public"]["Enums"]["region_type"] | null
           source_url: string
           summary?: string | null
           tags?: string[] | null
           updated_at?: string | null
-          zone?: Database["public"]["Enums"]["zone_type"] | null
         }
         Update: {
           content_generated_by?: string | null
@@ -49,46 +49,90 @@ export type Database = {
           headline?: string
           id?: string
           image_url?: string | null
+          news_beat?: Database["public"]["Enums"]["news_beat_type"] | null
           published_date?: string
           region?: Database["public"]["Enums"]["region_type"] | null
           source_url?: string
           summary?: string | null
           tags?: string[] | null
           updated_at?: string | null
-          zone?: Database["public"]["Enums"]["zone_type"] | null
         }
         Relationships: []
+      }
+      news_generation_history: {
+        Row: {
+          articles_generated: number | null
+          created_at: string | null
+          generation_status: string | null
+          id: string
+          news_beat: Database["public"]["Enums"]["news_beat_type"] | null
+          region: Database["public"]["Enums"]["region_type"] | null
+          requested_date: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          articles_generated?: number | null
+          created_at?: string | null
+          generation_status?: string | null
+          id?: string
+          news_beat?: Database["public"]["Enums"]["news_beat_type"] | null
+          region?: Database["public"]["Enums"]["region_type"] | null
+          requested_date: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          articles_generated?: number | null
+          created_at?: string | null
+          generation_status?: string | null
+          id?: string
+          news_beat?: Database["public"]["Enums"]["news_beat_type"] | null
+          region?: Database["public"]["Enums"]["region_type"] | null
+          requested_date?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_generation_history_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       news_requests: {
         Row: {
           articles_found: number | null
           created_at: string | null
           id: string
+          news_beat: Database["public"]["Enums"]["news_beat_type"] | null
           region: Database["public"]["Enums"]["region_type"] | null
           request_status: string | null
           requested_date: string
           user_id: string
-          zone: Database["public"]["Enums"]["zone_type"] | null
         }
         Insert: {
           articles_found?: number | null
           created_at?: string | null
           id?: string
+          news_beat?: Database["public"]["Enums"]["news_beat_type"] | null
           region?: Database["public"]["Enums"]["region_type"] | null
           request_status?: string | null
           requested_date: string
           user_id: string
-          zone?: Database["public"]["Enums"]["zone_type"] | null
         }
         Update: {
           articles_found?: number | null
           created_at?: string | null
           id?: string
+          news_beat?: Database["public"]["Enums"]["news_beat_type"] | null
           region?: Database["public"]["Enums"]["region_type"] | null
           request_status?: string | null
           requested_date?: string
           user_id?: string
-          zone?: Database["public"]["Enums"]["zone_type"] | null
         }
         Relationships: [
           {
@@ -132,8 +176,10 @@ export type Database = {
           created_at: string | null
           id: string
           notification_enabled: boolean | null
+          preferred_beats:
+            | Database["public"]["Enums"]["news_beat_type"][]
+            | null
           preferred_regions: Database["public"]["Enums"]["region_type"][] | null
-          preferred_zones: Database["public"]["Enums"]["zone_type"][] | null
           updated_at: string | null
           user_id: string
         }
@@ -141,10 +187,12 @@ export type Database = {
           created_at?: string | null
           id?: string
           notification_enabled?: boolean | null
+          preferred_beats?:
+            | Database["public"]["Enums"]["news_beat_type"][]
+            | null
           preferred_regions?:
             | Database["public"]["Enums"]["region_type"][]
             | null
-          preferred_zones?: Database["public"]["Enums"]["zone_type"][] | null
           updated_at?: string | null
           user_id: string
         }
@@ -152,10 +200,12 @@ export type Database = {
           created_at?: string | null
           id?: string
           notification_enabled?: boolean | null
+          preferred_beats?:
+            | Database["public"]["Enums"]["news_beat_type"][]
+            | null
           preferred_regions?:
             | Database["public"]["Enums"]["region_type"][]
             | null
-          preferred_zones?: Database["public"]["Enums"]["zone_type"][] | null
           updated_at?: string | null
           user_id?: string
         }
@@ -177,6 +227,20 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      news_beat_type:
+        | "sports"
+        | "agriculture"
+        | "politics"
+        | "technology"
+        | "health"
+        | "business"
+        | "entertainment"
+        | "crime"
+        | "real_estate"
+        | "education"
+        | "environment"
+        | "lifestyle"
+        | "international"
       region_type:
         | "delhi"
         | "mumbai"
@@ -278,7 +342,6 @@ export type Database = {
         | "jalgaon"
         | "udaipur"
         | "maheshtala"
-      zone_type: "north" | "south" | "east" | "west" | "central" | "northeast"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -406,6 +469,21 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      news_beat_type: [
+        "sports",
+        "agriculture",
+        "politics",
+        "technology",
+        "health",
+        "business",
+        "entertainment",
+        "crime",
+        "real_estate",
+        "education",
+        "environment",
+        "lifestyle",
+        "international",
+      ],
       region_type: [
         "delhi",
         "mumbai",
@@ -508,7 +586,6 @@ export const Constants = {
         "udaipur",
         "maheshtala",
       ],
-      zone_type: ["north", "south", "east", "west", "central", "northeast"],
     },
   },
 } as const

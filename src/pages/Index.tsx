@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NewsGenerator } from "@/components/NewsGenerator";
 import { NewsList } from "@/components/NewsList";
+import { NewsHistory } from "@/components/NewsHistory";
 
 const Index = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -23,7 +24,14 @@ const Index = () => {
 
         <div className="space-y-8">
           <NewsGenerator onNewsGenerated={handleNewsGenerated} />
-          <NewsList refreshTrigger={refreshTrigger} />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <NewsList refreshTrigger={refreshTrigger} />
+            </div>
+            <div>
+              <NewsHistory />
+            </div>
+          </div>
         </div>
       </div>
     </div>

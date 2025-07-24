@@ -15,7 +15,7 @@ interface NewsGeneratorProps {
 export const NewsGenerator = ({ onNewsGenerated }: NewsGeneratorProps) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [region, setRegion] = useState("");
-  const [zone, setZone] = useState("");
+  const [newsBeat, setNewsBeat] = useState("");
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const { toast } = useToast();
 
@@ -24,16 +24,17 @@ export const NewsGenerator = ({ onNewsGenerated }: NewsGeneratorProps) => {
     "Central India", "Northeast India"
   ];
 
-  const zones = [
-    "Urban", "Rural", "Metro", "Tier-2 City", "Tier-3 City", 
-    "Industrial", "Agricultural", "Coastal"
+  const newsBeats = [
+    "Sports", "Agriculture", "Politics", "Technology", "Health",
+    "Business", "Entertainment", "Crime", "Real Estate", "Education",
+    "Environment", "Lifestyle", "International"
   ];
 
   const handleGenerateNews = async () => {
-    if (!region || !zone) {
+    if (!region || !newsBeat) {
       toast({
         title: "Missing Information",
-        description: "Please select both region and zone.",
+        description: "Please select both region and news beat.",
         variant: "destructive",
       });
       return;
@@ -45,7 +46,7 @@ export const NewsGenerator = ({ onNewsGenerated }: NewsGeneratorProps) => {
       const { data, error } = await supabase.functions.invoke('generate-news', {
         body: {
           region,
-          zone,
+          news_beat: newsBeat.toLowerCase(),
           requestedDate: date
         }
       });
@@ -54,7 +55,7 @@ export const NewsGenerator = ({ onNewsGenerated }: NewsGeneratorProps) => {
 
       toast({
         title: "News Generated!",
-        description: `Successfully generated ${data.count} news articles for ${region}, ${zone}.`,
+        description: `Successfully generated ${data.count} news articles for ${region}, ${newsBeat}.`,
       });
 
       onNewsGenerated();
@@ -78,7 +79,7 @@ export const NewsGenerator = ({ onNewsGenerated }: NewsGeneratorProps) => {
           Generate News Articles
         </CardTitle>
         <CardDescription>
-          Generate AI-powered news articles for specific regions and zones using Times of India style
+          Generate AI-powered news articles for specific regions and news beats using Times of India style
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -98,14 +99,14 @@ export const NewsGenerator = ({ onNewsGenerated }: NewsGeneratorProps) => {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="zone">Zone</Label>
-            <Select value={zone} onValueChange={setZone}>
+            <Label htmlFor="newsBeat">News Beat</Label>
+            <Select value={newsBeat} onValueChange={setNewsBeat}>
               <SelectTrigger>
-                <SelectValue placeholder="Select a zone" />
+                <SelectValue placeholder="Select a news beat" />
               </SelectTrigger>
               <SelectContent>
-                {zones.map((z) => (
-                  <SelectItem key={z} value={z}>{z}</SelectItem>
+                {newsBeats.map((beat) => (
+                  <SelectItem key={beat} value={beat}>{beat}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -124,7 +125,7 @@ export const NewsGenerator = ({ onNewsGenerated }: NewsGeneratorProps) => {
 
         <Button 
           onClick={handleGenerateNews} 
-          disabled={isGenerating || !region || !zone}
+          disabled={isGenerating || !region || !newsBeat}
           className="w-full"
         >
           {isGenerating ? (

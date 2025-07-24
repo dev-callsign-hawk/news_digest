@@ -9,7 +9,7 @@ interface NewsCardProps {
   tags: string[];
   source_url: string;
   region: string;
-  zone: string;
+  news_beat: string;
 }
 
 export const NewsCard = ({ 
@@ -19,7 +19,7 @@ export const NewsCard = ({
   tags, 
   source_url, 
   region, 
-  zone 
+  news_beat 
 }: NewsCardProps) => {
   return (
     <Card className="h-full hover:shadow-lg transition-shadow duration-200">
@@ -39,7 +39,7 @@ export const NewsCard = ({
           <Calendar className="h-3 w-3" />
           {new Date(published_date).toLocaleDateString('en-IN')}
           <span className="mx-2">•</span>
-          {region}, {zone}
+          {region} • {news_beat}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

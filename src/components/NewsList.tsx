@@ -13,7 +13,7 @@ interface NewsArticle {
   tags: string[];
   source_url: string;
   region: string;
-  zone: string;
+  news_beat: string;
 }
 
 interface NewsListProps {
@@ -92,7 +92,7 @@ export const NewsList = ({ refreshTrigger }: NewsListProps) => {
             tags={article.tags}
             source_url={article.source_url}
             region={article.region}
-            zone={article.zone}
+            news_beat={article.news_beat}
           />
         ))}
       </div>

@@ -17,19 +17,19 @@ serve(async (req) => {
   }
 
   try {
-    const { region, zone, requestedDate } = await req.json();
+    const { region, news_beat, requestedDate } = await req.json();
     
-    console.log(`Generating news for ${region}, ${zone} on ${requestedDate}`);
+    console.log(`Generating news for ${region}, ${news_beat} on ${requestedDate}`);
 
     if (!geminiApiKey) {
       throw new Error('Gemini API key not configured');
     }
 
-    const prompt = `Generate 5 realistic news headlines and summaries for ${region}, ${zone} region for ${requestedDate}. 
+    const prompt = `Generate 5 realistic news headlines and summaries for ${region} region in ${news_beat} category for ${requestedDate}. 
     Style: Times of India format - engaging, informative headlines. 
-    Include: local politics, development, social issues, infrastructure, education.
+    Focus on ${news_beat} news - make it category-specific and relevant.
     Format as JSON array with: headline, summary, tags (array of 3-5 relevant tags).
-    Make it realistic and region-appropriate.`;
+    Make it realistic and region-appropriate with focus on ${news_beat} beat.`;
 
     const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', {
       method: 'POST',
@@ -68,7 +68,7 @@ serve(async (req) => {
       newsArticles = [{
         headline: "News Generated Successfully",
         summary: generatedText.slice(0, 200) + "...",
-        tags: ["news", region.toLowerCase(), zone.toLowerCase()]
+        tags: ["news", region.toLowerCase(), news_beat.toLowerCase()]
       }];
     }
 
@@ -80,7 +80,7 @@ serve(async (req) => {
       headline: article.headline,
       summary: article.summary,
       region: region,
-      zone: zone,
+      news_beat: news_beat,
       published_date: requestedDate,
       tags: article.tags || ["news"],
       source_url: "https://timesofindia.indiatimes.com",
